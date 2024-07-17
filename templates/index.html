@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nicolas To do list</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+</head>
+<body>
+    <div class="d-flex" id="wrapper">
+        <div class="bg-light border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading">NICOLAS TO DO LIST</div>
+            <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item list-group-item-action bg-light">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-light">
+                    <i class="fa-solid fa-calendar-days"></i> Hoje
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-light">
+                    <i class="fa-solid fa-calendar"></i> Em breve
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-light">
+                    <i class="fa-solid fa-hashtag"></i> Etiquetas
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-light">
+                    <i class="fa-solid fa-star"></i> Favoritos
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-light">
+                    <i class="fas fa-cog"></i> Preferências
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-light">
+                    <i class="fas fa-book"></i> Tutoriais
+                </a>
+                <a href="#" class="list-group-item list-group-item-action bg-light">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </a>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <img class="logo" src="{{ url_for('static', filename='imgs/logo.png') }}" alt="Logo" id="menu-toggle">
+            </nav>
+            <div class="todo-container m-4">
+                <h1>To Do List</h1>
+                <form id="todo-form" method="post">
+                    <input type="text" id="task_name" name="task_name" placeholder="Adicionar nova tarefa" required>
+                    <select id="task_priority" name="task_priority" class="custom-select-padding select">
+                        <option selected>Escolha um grau de prioridade...</option>
+                        <option value="low" class="optionSelected">Baixa</option>
+                        <option value="medium" class="optionSelected">Média</option>
+                        <option value="high" class="optionSelected">Alta</option>
+                    </select>
+                    <input type="date" id="task_date" name="task_date" required class="select">
+                    <input type="time" id="task_hour" name="task_hour" required>
+                    <button type="submit" class="adicionar" id="addButton" value="submit">Adicionar</button>
+                </form>
+                <br><br>
+                <ul id="todo-list">
+                    {% for row in rows %}
+                        <li class="lista">
+                            <input type="text" id="task_name" name="task_name" placeholder="{{ row['task_name'] }}" required disabled>
+                            <input type="text" id="task_name" name="task_name" placeholder="{{ row['task_priority'] }}" required disabled>
+                            <input type="date" id="task_date" name="task_date" required class="select" value="{{ row['task_date']|replace('/', '-') }}" disabled>
+                            <input type="time" id="task_hour" name="task_hour" required value="{{ row['task_hour'] }}" disabled>
+                            <form action="{{ url_for('delete_task', task_id=row['task_id']) }}" method="POST" style="display: inline;" onsubmit="return confirmDelete(event, this);">
+                                <button type="submit" class="btn-danger remover">Excluir</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+</body>
+</html>
